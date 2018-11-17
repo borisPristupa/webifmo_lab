@@ -10,14 +10,161 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:xlink="http://www.w3.org/1999/xlink">
+
 
 <h:head>
-    <title>Test connection</title>
+    <title>Web-application lb_3</title>
+    <h:outputStylesheet library="css" name="style.css" />
+    <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"/>
+    <h:outputScript library="js" name="mainScript.js"/>
 </h:head>
 
 <h:body>
-    It really works!
+    <div class="header">
+        <div class="image"><h:graphicImage  class="logo" url="/resources/pictures/logotip.png"/></div>
+        <div class="info">
+            <div class="names">Выполнили студенты группы Р3211 Приступа Борис, Смирнова Анастасия </div>
+            <div class="variant">Вариант 75389 </div>
+        </div>
+    </div>
+    <div class="data">
+        <h:form id="graphForm">
+            <h:inputText id="xGraph" value="#{recordBean.x}"/>
+            <h:inputText id="yGraph" value="#{recordBean.y}"/>
+            <h:inputText id="rGraph" value="#{recordBean.r}"/>
+            <!--<h:commandButton id="graphButton" style="display: none" action="#{recordBean.addRecord()}">-->
+            <h:commandButton id="graphButton" action="#{recordBean.addRecord()}">
+                <f:ajax execute="@form" render="xGraph yGraph"/>
+            </h:commandButton>
+            <!--<h:message id="y_message" for="y_value" style="color: lightcoral" autoupdate="true"/>-->
+        </h:form>
+        <div class="inputValues">
+            <h:form id="someForm">
+
+                 <!--choose x - value-->
+                <h:outputLabel value="Выберите значение х: "/>
+                <h:commandButton styleClass="x_5" value="-5" onclick="pressed(-5)">
+                    <f:setPropertyActionListener value="-5" target="#{recordBean.x}"/>
+                    <f:ajax/>
+                </h:commandButton>
+                <h:commandButton styleClass="x_4" value="-4" onclick="pressed(-4)">
+                    <f:setPropertyActionListener value="-4" target="#{recordBean.x}"/>
+                    <f:ajax/>
+                </h:commandButton>
+                <h:commandButton styleClass="x_3" value="-3" onclick="pressed(-3)">
+                    <f:setPropertyActionListener value="-3" target="#{recordBean.x}"/>
+                    <f:ajax/>
+                </h:commandButton>
+                <h:commandButton styleClass="x_2" value="-2" onclick="pressed(-2)">
+                    <f:setPropertyActionListener value="-2" target="#{recordBean.x}"/>
+                    <f:ajax/>
+                </h:commandButton>
+                <h:commandButton styleClass="x_1" value="-1" onclick="pressed(-1)">
+                    <f:setPropertyActionListener value="-1" target="#{recordBean.x}"/>
+                    <f:ajax/>
+                </h:commandButton>
+                <h:commandButton styleClass="x0" value="0" onclick="pressed(0)">
+                    <f:setPropertyActionListener value="0" target="#{recordBean.x}"/>
+                    <f:ajax/>
+                </h:commandButton>
+                <h:commandButton styleClass="x1" value="1" onclick="pressed(1)">
+                    <f:setPropertyActionListener value="1" target="#{recordBean.x}"/>
+                    <f:ajax/>
+                </h:commandButton>
+                <h:commandButton styleClass="x2" value="2" onclick="pressed(2)">
+                    <f:setPropertyActionListener value="2" target="#{recordBean.x}"/>
+                    <f:ajax/>
+                </h:commandButton>
+                <h:commandButton styleClass="x3" value="3" onclick="pressed(3)">
+                    <f:ajax />
+                    <f:setPropertyActionListener value="3" target="#{recordBean.x}"/>
+                </h:commandButton>
+                <!-- choose y - value-->
+                <p/><h:outputLabel for="y_value" value="Введите значение y {-5;5}: "/>
+                <h:inputText id="y_value" value="#{recordBean.y}" required = "true">
+                    <f:validateDoubleRange minimum="-5" maximum="5"/>
+                </h:inputText>
+                <h:message id="y_message" for="y_value" style="color: lightcoral" autoupdate="true"/>
+
+                 <!--choose r - value-->
+                <p/><h:outputLabel for="r_value" value="Выберите значение r: " />
+                <p:spinner id="r_value" value="#{recordBean.r}"  stepFactor="0.1" min="0.1" max="3" size="4" />
+
+                <!--<p/><h:commandButton class="check" type="submit" value="Проверить" />-->
+                <h:commandButton class="check" value="Проверить" action="#{recordBean.addRecord()}">
+                    <f:ajax execute="@form" render="recordTable y_message"/>
+                </h:commandButton>
+
+
+        </h:form>
+            <h:form>
+            <h:commandButton  styleClass="button" id="submit"
+                              action="goToStart" value="Вернуться на стартовую страницу" />
+            </h:form>
+        </div>
+
+        <div class="picture" onclick="graphClicked(event)">
+            <svg id="graph" width="400px" height="400px" xmlns="http://www.w3.org/2000/svg" >
+                SVG not supported, sorry
+                <!--<rect width="400px" height="400px" fill="rgb(85,204,255,0.7)" stroke-width="1" stroke="rgb(0,0,0)"/>-->
+                <!--<line x1="200" y1="0" x2="200" y2="400" stroke-width="1" stroke="rgb(0,0,0)"/>-->
+                <!--<line x1="0" y1="200" x2="400" y2="200" stroke-width="1" stroke="rgb(0,0,0)"/>-->
+                <!--<rect x="100" y="150" width="100px" height="50px" fill="blue" stroke-width="1" stroke="rgb(0,0,0)"/>-->
+
+                <!--<defs>-->
+                    <!--<symbol id="my_circle">-->
+                        <!--<circle cx="200" cy="200" r="50" fill="red" stroke-width="1" stroke="rgb(0,0,0)"/>-->
+                    <!--</symbol>-->
+                <!--</defs>-->
+                <!--<use xlink:href="#my_circle" height="100" width="50"/>-->
+                <!--<image xlink:href="resources/pictures/graph.jpg"/>-->
+                <defs>
+                    <pattern id="image" patternUnits="userSpaceOnUse" width="400" height="400">
+                        <image x="0" y="0" width="400" height="400" xlink:href="https://pp.userapi.com/c852236/v852236264/48704/GTQi7ksgHFs.jpg"/>
+                        <!--<image x="0" y="0" width="400" height="400" xlink:href="/resources/pictures/graph.jpg"/>-->
+                    </pattern>
+                </defs>
+                <polygon points="0,0 400,0 400,400 0,400" fill="url(#image)"/>
+            </svg>
+        </div>
+    </div>
+
+
+    <!--<h:panelGroup id="recordTable">-->
+        <!--<h:dataTable value="#{recordBean.records}" var="record">-->
+            <!--<h:column>-->
+                <!--<f:facet name="header">X</f:facet>-->
+                <!--#{record.x}-->
+            <!--</h:column>-->
+
+            <!--<h:column>-->
+                <!--<f:facet name="header">Y</f:facet>-->
+                <!--#{record.y}-->
+            <!--</h:column>-->
+
+            <!--<h:column>-->
+                <!--<f:facet name="header">R</f:facet>-->
+                <!--#{record.r}-->
+            <!--</h:column>-->
+
+            <!--<h:column>-->
+                <!--<f:facet name="header">Попадание</f:facet>-->
+                <!--#{record.hit}-->
+            <!--</h:column>-->
+        <!--</h:dataTable>-->
+    <!--</h:panelGroup>-->
+
+
+
+
+    <div class="footer">
+        <p class="footer_text">Университет ИТМО Факультет ПИиКТ</p>
+    </div>
 </h:body>
 
 </html>

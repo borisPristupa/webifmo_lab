@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:b="http://java.sun.com/jsf/composite"
+>
+
+<!--<f:view>-->
+<h:head>
+    <title> Start page </title>
+    <h:outputStylesheet library="css" name="style.css" />
+    <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"/>
+    <h:outputScript library="js" name="script.js"/>
+</h:head>
+<h:body>
+
+    <!--<h:outputLabel class="welcome" value="Hello, world"/>-->
+
+
+    <div class="header">
+        <div class="image"><h:graphicImage  class="logo" url="/resources/pictures/logotip.png"/></div>
+        <div class="info">
+            <div class="names">Выполнили студенты группы Р3211 Приступа Борис, Смирнова Анастасия </div>
+            <div class="variant">Вариант 75389 </div>
+        </div>
+        <!--<h:outputLabel class="names" value="" />-->
+        <!--<h:outputLabel class="variant" value=" " />-->
+    </div>
+
+    <div class="watch">
+        <canvas width="300px" height="300px"  id="clock">
+            Canvas isn't supported
+        </canvas>
+    </div>
+    <div class="current_params">
+        <div id="current_time"></div>
+        <div id="current_day"></div>
+    </div>
+
+    <h:form>
+        <h:commandButton  class="button" id="submit"
+            action="goToMain" value="Перейти на главную страницу" />
+    </h:form>
+
+    <div class="footer">
+        <p class="footer_text">Университет ИТМО Факультет ПИиКТ</p>
+    </div>
+
+</h:body>
+<!--</f:view>-->
+</html>
