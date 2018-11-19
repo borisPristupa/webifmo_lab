@@ -41,6 +41,20 @@ body {
     color: blue;
 }
 
+.data {
+    /*border: 3px solid black;*/
+    margin-top: 100px;
+    /*height: 550px;*/
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-around;
+
+}
+.picture{
+    border-radius: 5px;
+    border: 3px solid blue;
+}
 .inputValues{
     /*margin-top: 100px;*/
     /*margin-left: 70px;*/
@@ -51,10 +65,13 @@ body {
     font-size: 16px;
     width: 450px;
 }
-#x_5,#x_4,#x_3,#x_2,#x_1,#x0,#x1,#x2,#x3{
-    background: white;
+/*#x_5,#x_4,#x_3,#x_2,#x_1,#x0,#x1,#x2,#x3{*/
+    /*background: white;*/
+/*}*/
+.y_value{
+    text-align: center;
 }
-#r_value,#y_value{
+.resultTable{
     text-align: center;
 }
 .check{
@@ -78,8 +95,17 @@ body {
     color:blue;
 }
 
+.returnButton{
+    /*bottom: 60px;*/
+    font-family: cursive;
+    font-size: 20px;
+}
+.returnButton:hover{
+    text-decoration: underline;
+    color:blue;
+}
 .footer{
-    height: 60px;
+    height: 100px;
     width: 100%;
     background: linear-gradient(to top,#55ccff,blanchedalmond);
     position: fixed;
@@ -91,21 +117,7 @@ body {
     vertical-align: bottom;
 }
 
-.data {
-    /*border: 3px solid black;*/
 
-    margin-top: 100px;
-    height: 550px;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-around;
-
-}
-.picture{
-    border-radius: 5px;
-    border: 3px solid blue;
-    }
 
 /*.data{*/
     /*margin-top: 100px;*/

@@ -71,7 +71,9 @@ public class RecordBean {
         }
 
         records.add(newRecord);
-        //*/
+        for (Record record: records) {
+            System.out.println("x = "+ record.x);
+        }
     }
 
     private boolean isInsideArea(float x, float y, float r) {

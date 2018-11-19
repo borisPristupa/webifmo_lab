@@ -143,8 +143,7 @@ function graphClicked(event) {
 }
 
 function getR() {
-    let r = document.getElementById("someForm:r_value_input").value;
-    return r;
+    return document.getElementById("someForm:r_value_input").value;
 }
 
 function checkHit(x, y, r) {

@@ -1,18 +1,18 @@
 //import lombok.*;
 
 //@Data
-class Record {
+public class Record {
 //    @NonNull private int x;
 //    @NonNull private float y;
 //    @NonNull private float r;
 
 //    @Setter(AccessLevel.NONE)
 //    @NonNull
-    private float x;
-    private float y;
-    private  float r;
+     float x;
+     float y;
+     float r;
 
-    private boolean hit;
+     boolean hit;
 
     public Record(float x, float y, float r, boolean hit) {
         this.x = x;

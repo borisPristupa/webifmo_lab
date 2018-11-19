@@ -32,20 +32,21 @@
             <div class="variant">Вариант 75389 </div>
         </div>
     </div>
+
     <div class="data">
         <h:form id="graphForm">
-            <h:inputText id="xGraph" value="#{recordBean.x}"/>
-            <h:inputText id="yGraph" value="#{recordBean.y}"/>
-            <h:inputText id="rGraph" value="#{recordBean.r}"/>
+            <h:inputHidden id="xGraph" value="#{recordBean.x}"/>
+            <h:inputHidden id="yGraph" value="#{recordBean.y}"/>
+            <h:inputHidden id="rGraph" value="#{recordBean.r}"/>
             <!--<h:commandButton id="graphButton" style="display: none" action="#{recordBean.addRecord()}">-->
-            <h:commandButton id="graphButton" action="#{recordBean.addRecord()}">
+            <h:commandButton  style="display: none" id="graphButton" action="#{recordBean.addRecord()}">
                 <f:ajax execute="@form" render="xGraph yGraph"/>
             </h:commandButton>
             <!--<h:message id="y_message" for="y_value" style="color: lightcoral" autoupdate="true"/>-->
         </h:form>
+
         <div class="inputValues">
             <h:form id="someForm">
-
                  <!--choose x - value-->
                 <h:outputLabel value="Выберите значение х: "/>
                 <h:commandButton styleClass="x_5" value="-5" onclick="pressed(-5)">
@@ -84,9 +85,10 @@
                     <f:ajax />
                     <f:setPropertyActionListener value="3" target="#{recordBean.x}"/>
                 </h:commandButton>
+
                 <!-- choose y - value-->
                 <p/><h:outputLabel for="y_value" value="Введите значение y {-5;5}: "/>
-                <h:inputText id="y_value" value="#{recordBean.y}" required = "true">
+                <h:inputText id="y_value" styleClass="y_value" value="#{recordBean.y}" required = "true">
                     <f:validateDoubleRange minimum="-5" maximum="5"/>
                 </h:inputText>
                 <h:message id="y_message" for="y_value" style="color: lightcoral" autoupdate="true"/>
@@ -95,17 +97,36 @@
                 <p/><h:outputLabel for="r_value" value="Выберите значение r: " />
                 <p:spinner id="r_value" value="#{recordBean.r}"  stepFactor="0.1" min="0.1" max="3" size="4" />
 
-                <!--<p/><h:commandButton class="check" type="submit" value="Проверить" />-->
                 <h:commandButton class="check" value="Проверить" action="#{recordBean.addRecord()}">
                     <f:ajax execute="@form" render="recordTable y_message"/>
                 </h:commandButton>
 
 
         </h:form>
-            <h:form>
-            <h:commandButton  styleClass="button" id="submit"
-                              action="goToStart" value="Вернуться на стартовую страницу" />
-            </h:form>
+            <h:panelGroup id="recordTable" class="resultTable">
+                <h:dataTable value="#{recordBean.records}" var="record">
+                    <h:column>
+                        <f:facet name="header">X</f:facet>
+                        #{record.x}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Y</f:facet>
+                        #{record.y}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">R</f:facet>
+                        #{record.r}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">Попадание</f:facet>
+                        #{record.hit}
+                    </h:column>
+                </h:dataTable>
+            </h:panelGroup>
+
         </div>
 
         <div class="picture" onclick="graphClicked(event)">
@@ -130,39 +151,26 @@
                     </pattern>
                 </defs>
                 <polygon points="0,0 400,0 400,400 0,400" fill="url(#image)"/>
+                <!--<ui:repeat var="record" value="#{recordBean.records}">-->
+                    <!--<circle cx="#{145.45 * record.x / record.r + 200}" cy="#{145.45 * record.y / record.r + 200}"-->
+                            <!--stroke="black" fill="#{record.hit eq true ? 'green' : 'red'}" class="point" r="3"/>-->
+                <!--</ui:repeat>-->
             </svg>
         </div>
     </div>
+    <!--<ui:repeat value="#{recordBean.records}" var="record">-->
+        <!--<h:outputText value="#{record.x}"/>-->
+    <!--</ui:repeat>-->
 
 
-    <!--<h:panelGroup id="recordTable">-->
-        <!--<h:dataTable value="#{recordBean.records}" var="record">-->
-            <!--<h:column>-->
-                <!--<f:facet name="header">X</f:facet>-->
-                <!--#{record.x}-->
-            <!--</h:column>-->
-
-            <!--<h:column>-->
-                <!--<f:facet name="header">Y</f:facet>-->
-                <!--#{record.y}-->
-            <!--</h:column>-->
-
-            <!--<h:column>-->
-                <!--<f:facet name="header">R</f:facet>-->
-                <!--#{record.r}-->
-            <!--</h:column>-->
-
-            <!--<h:column>-->
-                <!--<f:facet name="header">Попадание</f:facet>-->
-                <!--#{record.hit}-->
-            <!--</h:column>-->
-        <!--</h:dataTable>-->
-    <!--</h:panelGroup>-->
-
-
-
-
+    <!--<div class="returnButton">-->
+        <!---->
+    <!--</div>-->
     <div class="footer">
+        <h:form>
+        <h:commandButton  styleClass="returnButton" id="submit"
+                          action="goToStart" value="Вернуться на стартовую страницу" />
+    </h:form>
         <p class="footer_text">Университет ИТМО Факультет ПИиКТ</p>
     </div>
 </h:body>
