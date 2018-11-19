@@ -18,6 +18,11 @@ public class RecordBean {
     private boolean hit;
     private List<Record> records;
 
+    private String errorMessage ="";
+
+    public String getErrorMessage( ){
+        return errorMessage;
+    }
     public boolean isHit() {
         return hit;
     }
@@ -56,6 +61,7 @@ public class RecordBean {
             } catch (SQLException e) {
                 records = new LinkedList<Record>();
                 e.printStackTrace();
+                errorMessage = "Ошибка базы данных";
             } catch (ClassNotFoundException e) {
                 records = new LinkedList<Record>();
                 e.printStackTrace();
@@ -82,7 +88,7 @@ public class RecordBean {
             DBConnectivity connectivity = DBConnectivity.connect();
 
             if (null == records) {
-                records = connectivity.getRecords();
+                    records = connectivity.getRecords();
             }
             connectivity.addRecord(records.size() + 1, newRecord);
             connectivity.close();
@@ -90,6 +96,7 @@ public class RecordBean {
         } catch (SQLException e) {
             records = new LinkedList<Record>();
             e.printStackTrace();
+            errorMessage = "Ошибка базы данных";
         } catch (ClassNotFoundException e) {
             records = new LinkedList<Record>();
             e.printStackTrace();

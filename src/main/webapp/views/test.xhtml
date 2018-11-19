@@ -45,10 +45,12 @@
             <h:inputHidden id="rGraph" value="#{recordBean.r}"/>
             <!--<h:commandButton id="graphButton" style="display: none" action="#{recordBean.addRecord()}">-->
             <h:commandButton style="display: none" id="graphButton" action="#{recordBean.addRecord}">
-                <f:ajax execute="@form" render="recordTable graphPanel xGraph yGraph"/>
+                <f:ajax execute="@form" render="errorDB recordTable graphPanel xGraph yGraph"/>
             </h:commandButton>
             <!--<h:message id="y_message" for="y_value" style="color: lightcoral" autoupdate="true"/>-->
         </h:form>
+
+
 
         <div class="inputValues">
             <h:form id="someForm">
@@ -94,8 +96,7 @@
                 <!-- choose y - value-->
                 <p/><h:outputLabel for="y_value" value="Введите значение y {-5;5}: "/>
                 <h:inputText id="y_value" styleClass="y_value" value="#{recordBean.y}"
-                             required="true" requiredMessage="Required!"
-                            validatorMessage="Must be a numeric within range [-5.0; 5.0]">
+                             required="true" converterMessage="Некорректное значение" size="7" maxlength="5">
                     <!--<f:validateRegex pattern="^[\-+]?0*[([0-4]([\.,][0-9]+)?)5]$"/>-->
                     <f:validateDoubleRange minimum="-5" maximum="5"/>
                 </h:inputText>
@@ -108,7 +109,7 @@
                 </p:spinner>
 
                 <h:commandButton class="check" value="Проверить" action="#{recordBean.addRecord}">
-                    <f:ajax execute="@form" render="recordTable graphPanel y_message"/>
+                    <f:ajax execute="@form" render="errorDB recordTable graphPanel y_message"/>
                 </h:commandButton>
             </h:form>
 
@@ -160,7 +161,9 @@
                     </ui:repeat>
                 </svg>
             </p:outputPanel>
+            <h:outputText id = "errorDB"  style="color:red" value="${recordBean.errorMessage}"/>
         </div>
+
     </div>
     <!--<ui:repeat value="#{recordBean.records}" var="record">-->
     <!--<h:outputText value="#{record.x}"/>-->
