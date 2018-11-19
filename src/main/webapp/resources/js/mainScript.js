@@ -125,7 +125,7 @@ function pressed(number) {
 
 function graphClicked(event) {
     let x = event.offsetX - 200,
-        y = event.offsetY - 200,
+        y = 200 - event.offsetY,
         r = getR();
     // 100px = r ;
     x = x*r/145.45;

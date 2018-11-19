@@ -2,24 +2,32 @@
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 //@Data
-@ManagedBean
-@ApplicationScoped
 public class RecordBean {
     private float x;
     private float y;
     private float r;
-    private ConcurrentLinkedQueue<Record> records;
+    private boolean hit;
+    private List<Record> records;
+
+    public boolean isHit() {
+        return hit;
+    }
 
     public float getX() {
         return x;
     }
 
     public void setX(float x) {
-        this.x = x;
+        this.x = Math.round(x * 1000) / 1000F;
     }
 
     public float getY() {
@@ -27,11 +35,11 @@ public class RecordBean {
     }
 
     public void setY(float y) {
-//        throw new NullPointerException();
-        this.y = y;
+        this.y = Math.round(y * 1000) / 1000F;
     }
 
     public float getR() {
+        if (r == 0) r = 0.1F;
         return r;
     }
 
@@ -39,19 +47,36 @@ public class RecordBean {
         this.r = r;
     }
 
-    public ConcurrentLinkedQueue<Record> getRecords() {
+    public List<Record> getRecords() {
+        if (null == records) {
+            try {
+                DBConnectivity connectivity = DBConnectivity.connect();
+                records = connectivity.getRecords();
+                connectivity.close();
+            } catch (SQLException e) {
+                records = new LinkedList<Record>();
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                records = new LinkedList<Record>();
+                e.printStackTrace();
+            }
+
+        }
         return records;
     }
 
-    public void setRecords(ConcurrentLinkedQueue<Record> records) {
+    public void setRecords(LinkedList<Record> records) {
         this.records = records;
     }
 
     public void addRecord() {
-        /*
-        throw new NullPointerException();
-         /*/
-        Record newRecord = new Record(x, y, r, isInsideArea(x, y, r));
+        if (r <= 0.09F) {
+            r = 0.1F;
+            return;
+        }
+
+        hit = isInsideArea(x, y, r);
+        Record newRecord = new Record(x, y, r, hit);
 
         try {
             DBConnectivity connectivity = DBConnectivity.connect();
@@ -63,20 +88,25 @@ public class RecordBean {
             connectivity.close();
 
         } catch (SQLException e) {
-            records = new ConcurrentLinkedQueue<Record>();
+            records = new LinkedList<Record>();
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            records = new ConcurrentLinkedQueue<Record>();
+            records = new LinkedList<Record>();
             e.printStackTrace();
         }
 
         records.add(newRecord);
-        for (Record record: records) {
-            System.out.println("x = "+ record.x);
+        for (Record record : records) {
+            System.out.println("x = " + record.getX());
         }
+
     }
 
-    private boolean isInsideArea(float x, float y, float r) {
+    public boolean checkArea() {
+        return hit = isInsideArea(x, y, r);
+    }
+
+    public boolean isInsideArea(float x, float y, float r) {
         boolean result = false;
 
         if (x <= 0 && y >= 0)

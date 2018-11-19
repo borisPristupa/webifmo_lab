@@ -6,13 +6,13 @@ public class Record {
 //    @NonNull private float y;
 //    @NonNull private float r;
 
-//    @Setter(AccessLevel.NONE)
+    //    @Setter(AccessLevel.NONE)
 //    @NonNull
-     float x;
-     float y;
-     float r;
+    private float x;
+    private float y;
+    private float r;
 
-     boolean hit;
+    boolean hit;
 
     public Record(float x, float y, float r, boolean hit) {
         this.x = x;
