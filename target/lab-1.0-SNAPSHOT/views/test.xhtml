@@ -49,7 +49,7 @@
             </h:commandButton>
             <!--<h:message id="y_message" for="y_value" style="color: lightcoral" autoupdate="true"/>-->
         </h:form>
-        <h:outputText id = "errorDB"  styleClass="color:red" value="${recordBean.errorMessage}"/>
+
 
 
         <div class="inputValues">
@@ -161,7 +161,9 @@
                     </ui:repeat>
                 </svg>
             </p:outputPanel>
+            <h:outputText id = "errorDB"  style="color:red" value="${recordBean.errorMessage}"/>
         </div>
+
     </div>
     <!--<ui:repeat value="#{recordBean.records}" var="record">-->
     <!--<h:outputText value="#{record.x}"/>-->

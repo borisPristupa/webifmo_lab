@@ -13,6 +13,8 @@
     <h:outputStylesheet library="css" name="style.css" />
     <script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"/>
     <h:outputScript library="js" name="script.js"/>
+    <h:outputScript library="js" name="game.js"/>
+
 </h:head>
 <h:body>
 
@@ -44,6 +46,11 @@
             action="goToMain" value="Перейти на главную страницу" />
     </h:form>
 
+    <div class="game">
+        <canvas id="game_canvas" width="1000" height="320">
+            Sorry, no games
+        </canvas>
+    </div>
     <div class="footer">
         <p class="footer_text">Университет ИТМО Факультет ПИиКТ</p>
     </div>
