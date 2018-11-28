@@ -105,7 +105,7 @@ body {
     color:blue;
 }
 .footer{
-    height: 30px;
+    height: 70px;
     width: 100%;
     background: linear-gradient(to top,#55ccff,blanchedalmond);
     position: fixed;
@@ -138,9 +138,9 @@ body {
 /*}*/
 
 .game {
-    width: 100%;
+    width: 1150px;
     height: 320px;
     margin-bottom: 30px;
-    margin-left: 150px;
+    padding-left: 150px;
 }
 

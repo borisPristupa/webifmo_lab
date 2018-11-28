@@ -374,7 +374,7 @@ function draw() {
     ctx.fillText("Left: a", 0, canvas.height/2 - 80);
     ctx.fillText("Right: d", 0, canvas.height/2 - 60);
     ctx.fillText("Fly: w", 0, canvas.height/2 - 40);
-    ctx.fillText("Hit: `", 0, canvas.height/2 - 20);
+    ctx.fillText("Hit: ` (ё)", 0, canvas.height/2 - 20);
 
     ctx.fillText("Left: arrow left", canvas.width - 150, canvas.height/2 - 80);
     ctx.fillText("Right: arrow right", canvas.width - 150, canvas.height/2 - 60);
