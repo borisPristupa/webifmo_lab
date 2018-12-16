@@ -12,8 +12,8 @@ class DBConnectivity {
 
     private void createSSHTunnel() {
         String SSHHost = "helios.cs.ifmo.ru";
-        String SSHUser = "sXXXXXX";
-        String SSHPassword = "password"; //TODO make safe
+        String SSHUser = "s245094";
+        String SSHPassword = "ekq341"; //TODO make safe
         int SSHPort = 2222;
 
         String remoteHost = "pg";
@@ -46,7 +46,7 @@ class DBConnectivity {
 //                    "boris", "boris");
 //        } else {
             connectivity.connection = DriverManager.getConnection("jdbc:postgresql://localhost:1234/studs",
-                    "sXXXXXX", "password");
+                    "s245094", "ekq341");
 //        }
 
         return connectivity;
