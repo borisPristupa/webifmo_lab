@@ -70,7 +70,7 @@ class Sprite extends Drawable {
         if (this.lives < 1) {
             game_finished = true;
             this.state = 'dead';
-            this.img.src = "assets/dead.png";
+            this.img.src = "resources/assets/dead.png";
 
             let other;
             if (this === game.duck1) {
@@ -80,7 +80,7 @@ class Sprite extends Drawable {
             }
 
             other.state = 'wins';
-            other.img.src = "assets/wins.png";
+            other.img.src = "resources/assets/wins.png";
             if (other.flips) {
                 other.x = max(game.ground.x, other.x - this.w / 2);
                 this.x = max(this.x, other.x + other.w);
@@ -96,7 +96,7 @@ class Sprite extends Drawable {
 
     imageUpdates() {
         if (this.state === 'wins') {
-            this.img.src = "assets/wins.png";
+            this.img.src = "resources/assets/wins.png";
             return;
         }
 
@@ -107,10 +107,10 @@ class Sprite extends Drawable {
                 this.ticker--;
             } else {
                 if (this.state === "walks1") {
-                    this.img.src = "assets/stays.png";
+                    this.img.src = "resources/assets/stays.png";
                     this.state = 'walks0';
                 } else {
-                    this.img.src = "assets/walks.png";
+                    this.img.src = "resources/assets/walks.png";
                     this.state = 'walks1';
                 }
                 this.ticker = game.FPS / 5;
@@ -120,13 +120,13 @@ class Sprite extends Drawable {
                 this.ticker--;
             } else {
                 if (this.state === "hits1") {
-                    this.img.src = "assets/hits.png";
+                    this.img.src = "resources/assets/hits.png";
                     this.state = 'hits0';
                 } else if (this.state === "hits0") {
-                    this.img.src = "assets/hits0.png";
+                    this.img.src = "resources/assets/hits0.png";
                     this.state = 'hits1';
                 } else {
-                    this.img.src = "assets/hits0.png";
+                    this.img.src = "resources/assets/hits0.png";
                 }
                 this.ticker = game.FPS / 3;
             }
@@ -145,7 +145,7 @@ class Sprite extends Drawable {
                 duckFly(this);
             } else {
                 this.state = 'stays';
-                this.img.src = "assets/stays.png";
+                this.img.src = "resources/assets/stays.png";
                 this.ay = 0;
                 this.vy = 0;
             }
@@ -196,8 +196,8 @@ window.onload = function () {
     duck1_img.id = "duck1";
     duck2_img.id = "duck2";
 
-    duck1_img.src = "assets/stays.png";
-    duck2_img.src = "assets/stays.png";
+    duck1_img.src = "resources/assets/stays.png";
+    duck2_img.src = "resources/assets/stays.png";
 
     game.ground = new ColorArea(canvas.width, 20, 0, canvas.height - 20, "#0E0");
 
@@ -217,11 +217,11 @@ window.onload = function () {
         duck.vy = -18;
         duck.ay = 1;
         duck.state = 'flies';
-        duck.img.src = "assets/flies.png";
+        duck.img.src = "resources/assets/flies.png";
     };
 
     this.duckHit = function (duck) {
-        duck.img.src = "assets/hits0.png";
+        duck.img.src = "resources/assets/hits0.png";
         if (duck.vx === 0) {
             duck.state = "hits";
         } else {
@@ -326,24 +326,24 @@ window.onkeyup = function (e) {
     if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
         game.duck2.vx = 0;
         if (!game.duck2.state.startsWith('flies')) {
-            game.duck2.img.src = "assets/stays.png";
+            game.duck2.img.src = "resources/assets/stays.png";
             game.duck2.state = 'stays';
         }
     } else if (e.key === 'a' || e.key === 'd') {
         game.duck1.vx = 0;
         if (!game.duck1.state.startsWith('flies')) {
-            game.duck1.img.src = "assets/stays.png";
+            game.duck1.img.src = "resources/assets/stays.png";
             game.duck1.state = 'stays';
         }
     } else if (e.key === '/' || e.key === '.') {
         if (!game.duck2.state.startsWith('flies')) {
             game.duck2.state = 'stays';
-            game.duck2.img.src = 'assets/stays.png';
+            game.duck2.img.src = 'resources/assets/stays.png';
         }
     } else if (e.key === '`' || e.key === 'ё') {
         if (!game.duck1.state.startsWith('flies')) {
             game.duck1.state = 'stays';
-            game.duck1.img.src = 'assets/stays.png';
+            game.duck1.img.src = 'resources/assets/stays.png';
         }
     } else if (e.key === 'ArrowUp') {
         game.duck2.up = false;
