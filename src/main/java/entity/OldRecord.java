@@ -1,7 +1,7 @@
-//import lombok.*;
+package entity;//import lombok.*;
 
 //@Data
-public class Record {
+public class OldRecord {
 //    @NonNull private int x;
 //    @NonNull private float y;
 //    @NonNull private float r;
@@ -14,7 +14,7 @@ public class Record {
 
     boolean hit;
 
-    public Record(float x, float y, float r, boolean hit) {
+    public OldRecord(float x, float y, float r, boolean hit) {
         this.x = x;
         this.y = y;
         this.r = r;

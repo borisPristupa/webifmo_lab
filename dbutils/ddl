@@ -1,0 +1,31 @@
+CREATE TABLE client(
+  id serial PRIMARY KEY,
+  login    text   not null,
+  password text   not null
+);
+
+
+CREATE TABLE oldRecord(
+    id serial PRIMARY KEY,
+    x numeric(6, 3) NOT NULL,
+    y numeric(6, 3) NOT NULL,
+    r numeric(3,1) NOT NULL,
+    hit boolean NOT NULL,
+    client_id int NOT NULL REFERENCES client
+);
+
+CREATE OR REPLACE FUNCTION hash_password() RETURNS TRIGGER AS $$
+    BEGIN
+        --
+        -- Выполнить требуемую операцию в emp и добавить в emp_audit строку,
+        -- отражающую эту операцию.
+        --
+            UPDATE client set password = md5(NEW.password);
+            RETURN NEW;
+    END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER hash_trigger
+AFTER INSERT ON client
+    FOR EACH ROW EXECUTE PROCEDURE hash_password();
+
