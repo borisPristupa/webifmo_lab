@@ -3,6 +3,7 @@ package webservice;
 import ejb.DBBean;
 import ejb.HelloBean;
 import ejb.SessionBean;
+import webservice.filters.AllowCrossOriginFilter;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -53,6 +54,9 @@ public class MyApplication extends Application {
         s.add(DBBean.class);
         s.add(HelloBean.class);
         s.add(Main.class);
+        s.add(AllowCrossOriginFilter.class);
         return s;
     }
+
+
 }

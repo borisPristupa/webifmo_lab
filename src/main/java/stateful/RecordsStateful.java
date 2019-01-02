@@ -31,8 +31,8 @@ public class RecordsStateful {
     @Override
     public String toString() {
         return "{" +
-                "records: " + recordEntities +
-                ", message:" + (null == message ? null : "'" + message + "'")+
+                "\"records\": " + recordEntities +
+                ", \"message\":" + (null == message ? null : '"' + message + '"')+
                 '}';
     }
 }

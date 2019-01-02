@@ -5,7 +5,8 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "client", schema = "s245094", catalog = "studs")
+//@Table(name = "client", schema = "s245094", catalog = "studs")
+@Table(name = "client")
 public class ClientEntity {
     private Integer id;
     private String login;
@@ -47,8 +48,8 @@ public class ClientEntity {
     public String toString() {
         return "{" +
                 "\"id\":" + id +
-                ", \"login\":'" + login + '\'' +
-                '}';
+                ", \"login\":\"" + login +
+                "\"}";
     }
 
     @Override

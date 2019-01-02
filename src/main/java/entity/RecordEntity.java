@@ -5,7 +5,8 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-@Table(name = "record", schema = "s245094", catalog = "studs")
+//@Table(name = "record", schema = "s245094", catalog = "studs")
+@Table(name = "record")
 public class RecordEntity {
     private Integer id;
     private BigDecimal x;
@@ -72,10 +73,10 @@ public class RecordEntity {
                 ", \"x\":" + x +
                 ", \"y\":" + y +
                 ", \"r\":" + r +
-                ", \"hit\":'" + hit +
+                ", \"hit\":\"" + hit +
 //                "\"clientId\":" + clientId +
                 //"', \"errorMessage\": '" + errorMessage +
-                "'}";
+                "\"}";
     }
 
     @Override

@@ -34,9 +34,9 @@ public class ClientStateful {
     @Override
     public String toString() {
         return "{" +
-                "user: " + clientEntity +
-                ", sessionId: " + (null == sessionId ? null : "'" + sessionId + "'") +
-                ", message:" + (null == message ? null : "'" + message + "'")+
+                "\"user\": " + clientEntity +
+                ", \"sessionId\": " + (null == sessionId ? null : '"' + sessionId + '"') +
+                ", \"message\":" + (null == message ? null : '"' + message + '"')+
                 '}';
     }
 }
