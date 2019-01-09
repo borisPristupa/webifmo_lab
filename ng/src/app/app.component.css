@@ -4,20 +4,34 @@ header{
     top: 0;
     left: 0;
     position: fixed;
+
+    font-size: large;
+    text-align: center;
+
+    background: linear-gradient(to top,blanchedalmond,#55ccff);
 }
+
+
 
 authorization{
     background: blanchedalmond;
     position: absolute;
-    border: 3px blue inset;
-    top: 30%;
-    left: 25%;
-    width: 50%;
+
+    top: 25%;
+    left: 40%;
+    width: 400px;
+    max-height: 70%;
+
+
+    text-align: center;
+    font-family: cursive;
+
 }
 
 data{
     position: absolute;
     top: 25%;
+    max-height: 70% ;
 }
 
 footer{
@@ -26,4 +40,30 @@ footer{
     position: fixed;
     left: 0;
     bottom: 0;
+
+    background: linear-gradient(to top,#55ccff,blanchedalmond);
+
+    text-align: center;
+    font-size: large;
+    font-family: cursive;
+
+}
+
+
+
+@media (max-width: 818px) {
+    header{
+        font-size: small;
+    }
+    footer{
+        font-size: small;
+    }
+
+    authorization{
+        width: 150px;
+        left: 25%;
+    }
+
+
+
 }

@@ -1,0 +1,29 @@
+/*.my_info{*/
+    /*font-family: cursive;*/
+    /*font-size: medium;*/
+    /*position: absolute;*/
+    /*top: 15%;*/
+    /*!*left: 37%;*!*/
+    /*text-align: center;*/
+/*}*/
+
+/*!*большой формат *!*/
+/*@media (min-width: 1204px){*/
+    /*.my_info{*/
+        /*font-size: large;*/
+    /*}*/
+/*}*/
+/*@media  {*/
+    /*.my_info{*/
+        /*font-size: large;*/
+    /*}*/
+/*}*/
+
+/*!*мобильные устройства*!*/
+/*@media (max-width: 818px) {*/
+    /*.my_info{*/
+        /*font-size: xx-small;*/
+        /*!*left: 29%;*!*/
+    /*}*/
+/*}*/
+

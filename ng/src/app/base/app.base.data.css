@@ -20,6 +20,18 @@
     display: inline-block;
 }
 
+#y{
+    text-align: center;
+}
+
 .error_validate{
     color: red;
+}
+
+.check{
+    font-family: cursive;
+}
+.check:hover{
+    text-decoration: underline;
+    color: blue;
 }

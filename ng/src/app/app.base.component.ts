@@ -1,14 +1,12 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'base',
     template:
-    '<div ><header> </header></div>' +
-    '<div><data></data></div>' +
-    '<div> <graph> </graph> </div>' +
-    '<div ><footer> </footer></div>',
+            '<header> </header>' +
+            '<data></data>' +
+            '<footer> </footer>',
     styleUrls:  ['./app.component.css']
 })
 export class AppBaseComponent {
-    name= '';
 }

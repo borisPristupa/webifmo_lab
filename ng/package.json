@@ -2,8 +2,7 @@
   "name": "lab4",
   "version": "1.0.0",
   "description": "First Angular 7 Project",
-  "author": "Eugene Popov <metanit.com>",
-  "start": "http-server -a localhost -p 8765",
+  "author": "students ",
   "scripts": {
     "dev": "webpack-dev-server --hot --open",
     "build": "webpack"
@@ -18,7 +17,8 @@
     "@angular/router": "~7.0.0",
     "core-js": "^2.5.7",
     "rxjs": "^6.3.3",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "ngx-webstorage": "latest"
   },
   "devDependencies": {
     "@types/node": "^10.12.0",

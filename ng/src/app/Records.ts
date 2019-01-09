@@ -1,4 +1,6 @@
 export class Records {
-    records: number[];
-    message: string;
+    x: number;
+    y: number;
+    r: number;
+    hit: string;
 }

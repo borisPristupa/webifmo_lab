@@ -1,0 +1,24 @@
+.error_message{
+   color: red;
+   font-size: medium;
+}
+
+.goToReg:hover{
+   color: blue;
+   text-decoration: underline;
+}
+
+#reg, #auth{
+   border: 3px blue inset;
+   position: absolute;
+   top: 25%;
+   padding: 10px;
+}
+
+#reg{
+   visibility: hidden;
+}
+
+input{
+   text-align: center;
+}
