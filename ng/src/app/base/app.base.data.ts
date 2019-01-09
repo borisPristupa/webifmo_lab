@@ -19,7 +19,7 @@ export class AppBaseData implements OnInit{
     records: Array<Records> ;
 
     ngOnInit(){
-        console.log("Переход на вторую страницу осуществлен");
+         console.log("Переход на вторую страницу осуществлен");
         this.draw();
 
         this.httpService.getRecordsBySessionId(this.storage.retrieve("sessionId")).subscribe(
@@ -30,7 +30,6 @@ export class AppBaseData implements OnInit{
             }
         );
     }
-
     point : Point = new Point();
 
     constructor(private httpService: HttpService,
@@ -130,8 +129,8 @@ export class AppBaseData implements OnInit{
 // чтение координат с графика
     getCoordinates(event: MouseEvent){
         //const graph = document.getElementById('sys').getBoundingClientRect();
-       this.current_x = (event.offsetX - 150) * this.r * 0.01;
-       this.current_y = (-1) * (event.offsetY - 150) * this.r * 0.01;
+       this.current_x = (event.offsetX - 150) * this.r / 100;
+       this.current_y = (-1) * (event.offsetY - 150) * this.r / 100;
        this.point.x = this.current_x;
        this.point.y = this.current_y;
        this.point.r = this.r;

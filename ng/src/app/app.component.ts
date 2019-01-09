@@ -1,3 +1,4 @@
+///<reference path="./duck/app.duck.component.ts"/>
 import { Component } from '@angular/core';
 
 @Component({

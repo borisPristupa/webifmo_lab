@@ -1,6 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin'); // плагин минимизации
+// var UglifyJSPlugin = require('uglifyjs-webpack-plugin'); // плагин минимизации
 module.exports = {
     entry: {
         'polyfills': './src/polyfills.ts',
@@ -44,7 +44,7 @@ module.exports = {
             /angular(\\|\/)core/,
             path.resolve(__dirname, 'src'), // каталог с исходными файлами
             {} // карта маршрутов
-        ),
-        new UglifyJSPlugin()
+        )//,
+        // new UglifyJSPlugin()
     ]
-}
+};
