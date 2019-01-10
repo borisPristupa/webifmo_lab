@@ -7,15 +7,16 @@ header{
 
     font-size: large;
     text-align: center;
+    font-family: cursive;
 
     background: linear-gradient(to top,blanchedalmond,#55ccff);
 
     display: flex;
     justify-content: space-around;
+    align-items: center;
 
     z-index: 1;
 
-    /*flex-wrap: wrap;*/
 }
 
 
@@ -60,17 +61,23 @@ footer{
     font-size: large;
     font-family: cursive;
 
+    align-items: center;
     z-index: 1;
 }
 
 
 
-@media (max-width: 818px) {
+@media (max-width: 700px) {
     header{
         font-size: small;
     }
     footer{
         font-size: small;
     }
+@media (min-width: 701px) and (max-width: 1200px) {
+    header{
+        font-size: xx-large;
+    }
 
+}
 }

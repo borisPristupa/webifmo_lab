@@ -4,6 +4,7 @@ import {HttpService} from "../services/http.service";
 import {Router} from "@angular/router";
 
 import {SessionStorageService} from 'ngx-webstorage';
+import {el} from "@angular/platform-browser/testing/src/browser_util";
 
 
 @Component({
@@ -63,14 +64,14 @@ export class AppAuthorizationComponent implements OnInit{
                     if(this.auth_message == null || this.auth_message == "Already authorized") {
                         this.router.navigate(['base']);
                     }
-                    else if (!this.isServerError()) {
+                    else if (this.isServerError()) {
                         this.router.navigate(['duck']);
                     }
                  },
                 error => {
                     //console.log("the code is " + error.statusCode);
                     this.storage.store("auth",false);
-                    this.storage.store("message","404");
+                    this.storage.store("message","Connection error");
                     this.router.navigate(['duck']);
                 }
             );
@@ -104,14 +105,14 @@ export class AppAuthorizationComponent implements OnInit{
                    if (this.reg_message == null || this.reg_message == "Already authorized") {
                        this.router.navigate(['base']);
                    }
-                   else if (!this.isServerError()) {
+                   else if (this.isServerError()) {
                        this.router.navigate(['duck']);
                    }
                },
                error => {
                    //console.log("the code is " + error.statusCode);
                    this.storage.store("auth",false);
-                   this.storage.store("message","404");
+                   this.storage.store("message","Connection error");
                    this.router.navigate(['duck']);
                }
            )
@@ -119,10 +120,22 @@ export class AppAuthorizationComponent implements OnInit{
     }
 
     isNewDataCorrect() {
+        this.checkEmptyData();
         return this.new_login != "" && this.new_password_1 != "" && this.new_password_1 == this.new_password_2;
     }
 
-// проверка идентиности вводимых паролей
+    checkEmptyData() {
+
+        if (this.new_login == "") document.getElementById("newLogin").style.background = "red";
+            else document.getElementById("newLogin").style.background = "white";
+        if (this.new_password_1 == "") document.getElementById("newPassword1").style.background = "red";
+            else document.getElementById("newPassword1").style.background = "white";
+        if (this.new_password_2 == "") document.getElementById("newPassword2").style.background = "red";
+            else document.getElementById("newPassword2").style.background = "white";
+
+    }
+
+// проверка идентичности вводимых паролей
     checkPassword(){
         const text = document.getElementById("cM");
         if (this.new_password_1 != this.new_password_2  ) {
@@ -136,11 +149,13 @@ export class AppAuthorizationComponent implements OnInit{
     }
 
     isServerError(){
-        return this.storage.retrieve("message") != "Wrong password" &&
-            this.storage.retrieve("message") != "Not such user "+ this.user &&
+        let isSevere = this.storage.retrieve("message") != "Wrong login/password" &&
+            !this.storage.retrieve("message").includes('No such user') &&
             this.storage.retrieve("message") != "Already authorized" &&
             this.storage.retrieve("message") != "User "+this.new_login+" already registered" &&
             this.storage.retrieve("message") != null ;
+        console.log("_________________" + this.storage.retrieve('message') + " = " + isSevere);
+        return isSevere ;
 
     }
 

@@ -22,19 +22,19 @@ export class AppBaseData implements OnInit{
 
         this.httpService.getRecordsBySessionId(this.storage.retrieve("sessionId")).subscribe(
             data => {
-                //this.respond_message = data['message'];
-                //this.storage.store("message",data['message']);
+                this.respond_message = data['message'];
+                this.storage.store("message",data['message']);
 
-                //if (this.respond_message == null){ // успешно
+                if (this.respond_message == null){ // успешно
                     this.storage.store("records", data['records']);
                     this.drawAllPoints();
                     this.records = data['records']
-                //}
-                //else if (this.respond_message != "Sorry, you have to log in") this.router.navigate(['duck']);
+                }
+                else if (this.respond_message != "Sorry, you have to log in") this.router.navigate(['duck']);
 
             },
             error => {
-                this.storage.store("message", "404");
+                this.storage.store("message", "Connection error");
                 this.router.navigate(['duck']);
             }
         );
@@ -59,7 +59,9 @@ export class AppBaseData implements OnInit{
     current_y: number;
 
     respond_message: string;
+
     error_message_y: string;
+    error_message_r: string;
 
     i: number;
 
@@ -104,7 +106,7 @@ export class AppBaseData implements OnInit{
 
 
                     }, error => {
-                    this.storage.store("message", "404");
+                    this.storage.store("message", "Connection error");
                     this.router.navigate(['duck']);
                 });
     }
@@ -131,25 +133,31 @@ export class AppBaseData implements OnInit{
 
 
                 }, error => {
-                    this.storage.store("message", "404");
+                    this.storage.store("message", "Connection error");
                     this.router.navigate(['duck']);
                 }
             )
     }
 
     isServerError(){
-        return this.respond_message != "Invalid parameters. Invalid x." &&
-            this.respond_message != "Invalid parameters. Invalid y." &&
-            this.respond_message != "Invalid parameters. Invalid r." &&
+        return  this.respond_message != "Sorry, you have to log in" &&
+            this.respond_message != null &&
+            !this.respond_message.includes("Invalid");
 
-            this.respond_message != "Invalid parameters. Invalid x. Invalid y." &&
-            this.respond_message != "Invalid parameters. Invalid y. Invalid r." &&
-            this.respond_message != "Invalid parameters. Invalid x. Invalid r." &&
 
-            this.respond_message != "Invalid parameters. Invalid x. Invalid y. Invalid r." &&
 
-            this.respond_message != "Sorry, you have to log in" &&
-            this.respond_message != null ;
+        // this.respond_message != "Invalid parameters. Invalid x." &&
+        //     this.respond_message != "Invalid parameters. Invalid y." &&
+        //     this.respond_message != "Invalid parameters. Invalid r." &&
+        //
+        //     this.respond_message != "Invalid parameters. Invalid x. Invalid y." &&
+        //     this.respond_message != "Invalid parameters. Invalid y. Invalid r." &&
+        //     this.respond_message != "Invalid parameters. Invalid x. Invalid r." &&
+        //
+        //     this.respond_message != "Invalid parameters. Invalid x. Invalid y. Invalid r." &&
+
+
+
     }
 
 
@@ -165,9 +173,20 @@ export class AppBaseData implements OnInit{
         }
    }
 
+   validateR(r : number){
+       if  (r>0)  {
+           this.error_message_r = "";
+           return true;
+       }
+       else {
+           this.error_message_r = "Радиус должен быть положительным";
+           return false;
+       }
+   }
+
 // считывание введенных значений координат
     getValues(){
-        if(this.validateY(this.y)){
+        if(this.validateY(this.y) && this.validateR(this.r)){
             this.point.x = this.x;
             this.point.y = this.y;
             this.point.r = this.r;
@@ -319,16 +338,18 @@ export class AppBaseData implements OnInit{
     reDraw(){
         console.log("new r = "+ this.r);
 
-        this.draw();
-        const all_records = this.storage.retrieve("records");
+        if (this.validateR(this.r)){
+            this.draw();
+            const all_records = this.storage.retrieve("records");
 
-        for (this.i=0;this.i<all_records.length;this.i++){
-            this.point.x = all_records[this.i]['x'];
-            this.point.y = all_records[this.i]['y'];
-            this.point.r = this.r;
-            this.hit = this.checkHit(this.point);
+            for (this.i=0;this.i<all_records.length;this.i++){
+                this.point.x = all_records[this.i]['x'];
+                this.point.y = all_records[this.i]['y'];
+                this.point.r = this.r;
+                this.hit = this.checkHit(this.point);
 
-            this.drawOnePoint(this.point,this.hit);
+                this.drawOnePoint(this.point,this.hit);
+            }
         }
 
     }
@@ -380,11 +401,11 @@ export class AppBaseData implements OnInit{
                         this.storage.clear("records");
                         this.draw();
                         this.records = [];
-                    }else if (this.respond_message != "Sorry, you have to log in.")  this.router.navigate(['duck']);
+                    }else if (this.respond_message != "Sorry, you have to log in")  this.router.navigate(['duck']);
 
 
             },error => {
-                this.storage.store("message", "404");
+                this.storage.store("message", "Connection error");
                 this.router.navigate(['duck']);
             }
         );
@@ -395,22 +416,22 @@ export class AppBaseData implements OnInit{
         this.httpService.getExit(this.storage.retrieve("login"))
             .subscribe(data=> {
 
-                        //todo: убрать комментарии внизу, после изменения ответа запроса
-                     //   this.storage.store("message",data["message"]);
-                    //    this.respond_message = data['message'];
+                       this.storage.store("message",data["message"]);
+                       this.respond_message = data['message'];
 
-               // if (this.respond_message == null ) { // успешно
+               if (this.respond_message == null ) { // успешно
                     this.storage.store('auth',"false");
                     this.storage.clear("login");
                     this.storage.clear("sessionId");
                     this.storage.clear("records");
                     this.router.navigate(['']);
-               // }
-                //else this.router.navigate(['duck']);
+               }
+                else this.router.navigate(['duck']);
             },
                     error => {
-                    this.router.navigate(['duck']);
-                        this.storage.store("message","404");
+                        this.storage.store("message","Connection error");
+                        this.router.navigate(['duck']);
+
             });
     }
 

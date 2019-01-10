@@ -24,12 +24,19 @@
 
         <div class="r_value" id="r">
             Выберите значение R:
+            <p><input (change)="reDraw()" name="r" [(ngModel)]='r' type="radio" [value]="-2">-2
+                <input (change)="reDraw()" name="r" [(ngModel)]='r' type="radio" [value]="-1.5">-1.5
+                <input (change)="reDraw()" name="r" [(ngModel)]='r' type="radio" [value]="-1">-1
+                <input (change)="reDraw()" name="r" [(ngModel)]='r' type="radio" [value]="-0.5">-0.5
+                <input (change)="reDraw()" name="r" [(ngModel)]='r' type="radio" [value]="0">0
             <p><input (change)="reDraw()" name="r" [(ngModel)]='r' type="radio" [value]="0.5">0.5
-            <input (change)="reDraw()" name="r" [(ngModel)]='r' type="radio" [value]="1" >1
-            <input (change)="reDraw()" name="r" [(ngModel)]='r' type="radio" [value]="1.5">1.5
-            <input (change)="reDraw()" name="r" [(ngModel)]='r' type="radio" [value]="2">2
-            <input (change)="reDraw()" name="r" [(ngModel)]='r' type="radio" [value]="2.5">2.5
+                <input (change)="reDraw()" name="r" [(ngModel)]='r' type="radio" [value]="1" >1
+                <input (change)="reDraw()" name="r" [(ngModel)]='r' type="radio" [value]="1.5">1.5
+                <input (change)="reDraw()" name="r" [(ngModel)]='r' type="radio" [value]="2">2
+            <p class="error_validate"> {{error_message_r}}
+            <p class="error_validate"> {{respond_message}}
         </div>
+
 
         <button class="check" (click)="getValues()"> Проверить </button>
     </div>

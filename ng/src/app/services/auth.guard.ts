@@ -15,7 +15,7 @@ export class AuthGuard  implements CanActivate{
         if (this.storage.retrieve("sessionId") != null &&
             ( this.storage.retrieve("message") == null ||
                 this.storage.retrieve("message") == "Already authorized" ||
-                this.storage.retrieve("message") == "404"
+                this.storage.retrieve("message") == "Connection error"
             )
         )
             return true;
