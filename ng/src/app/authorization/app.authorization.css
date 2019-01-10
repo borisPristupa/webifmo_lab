@@ -10,14 +10,11 @@
 
 #reg, #auth{
    border: 3px blue inset;
-   position: absolute;
-   top: 25%;
-   padding: 10px;
+   margin-top: 5%;
+   padding: 0 10px 0 10px;
+
 }
 
-#reg{
-   visibility: hidden;
-}
 
 input{
    text-align: center;

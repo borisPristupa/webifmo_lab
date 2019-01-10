@@ -1,0 +1,33 @@
+:host {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-content: space-around;
+}
+
+.d_text, .d_return{
+    font-style: oblique;
+    color: blueviolet;
+    size: auto;
+    text-align: center;
+}
+
+.d_error{
+    font-style: oblique;
+    color: red;
+}
+.d_error_cause{
+    text-decoration: underline;
+}
+
+.game{
+    display: block;
+}
+
+.return{
+    font-style: oblique;
+}
+.return:hover{
+    text-decoration: underline;
+    color: blue;
+}

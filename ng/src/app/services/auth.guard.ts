@@ -12,6 +12,17 @@ export class AuthGuard  implements CanActivate{
 
     canActivate(next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): boolean {
-        return this.storage.retrieve("sessionId") != null && this.storage.retrieve("message") == null;
+        if (this.storage.retrieve("sessionId") != null &&
+            ( this.storage.retrieve("message") == null ||
+                this.storage.retrieve("message") == "Already authorized" ||
+                this.storage.retrieve("message") == "404"
+            )
+        )
+            return true;
+        else {
+            this.router.navigate(['']);
+            return false;
+        }
+
     }
 }

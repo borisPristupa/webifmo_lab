@@ -416,4 +416,3 @@ export default class Loader {
         };
     }
 };
-

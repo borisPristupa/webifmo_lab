@@ -1,6 +1,6 @@
 <!--<div xmlns="http://www.w3.org/1999/html">-->
 
-<div class="input_values">
+<div class="main_info">
 
     <div  class="user_data">
         <div class="x_value" id="x">
@@ -10,15 +10,16 @@
             <input name="x" [(ngModel)]='x' type="radio"  [value]="-1">-1
             <input name="x" [(ngModel)]='x' type="radio" [value]="-0.5">-0.5
             <input name="x" [(ngModel)]='x' type="radio" [value]="0"  >0
-            <input name="x" [(ngModel)]='x' type="radio" [value]="0.5">0.5
+            <p><input name="x" [(ngModel)]='x' type="radio" [value]="0.5">0.5
             <input name="x" [(ngModel)]='x' type="radio" [value]="1">1
             <input name="x" [(ngModel)]='x' type="radio" [value]="1.5">1.5
             <input name="x" [(ngModel)]='x' type="radio" [value]="2">2
         </div>
+
         <div class="y_value">
             Введите значение y
-            <input id="y" required name="y" type="text" [(ngModel)] = 'y' placeholder="от -3 до 5" >
-            <p class="error_validate"> {{error_message}}</p>
+            <p><input id="y" required name="y" type="text" [(ngModel)] = 'y' placeholder="от -3 до 5" [maxlength]="7">
+            <p class="error_validate"> {{error_message_y}}</p>
         </div>
 
         <div class="r_value" id="r">
@@ -31,7 +32,6 @@
         </div>
 
         <button class="check" (click)="getValues()"> Проверить </button>
-
     </div>
 
     <div class="coordinates">
@@ -44,7 +44,6 @@
         <p> x = {{current_x}} , y = {{current_y}}
     </div>
 
-</div>
 
     <div  class="result">
         <table>
@@ -67,13 +66,15 @@
         </table>
     </div>
 
+</div>
 
+<div class="buttons">
     <div class="finish">
         <button class="output"  (click)="closeSession()"> Завершить сессию </button>
     </div>
     <div class="clear">
         <button (click)="clearRecords()">Очистить историю </button>
     </div>
-
+</div>
 <!--</div>-->
 

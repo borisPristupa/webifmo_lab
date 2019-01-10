@@ -4,21 +4,21 @@
     <input id="login" [(ngModel)] = "login" >
     <p> Пароль
     <input id="password" type="password" [(ngModel)] = "password">
-    <p class="error_message" >{{message}}
+    <p class="error_message" >{{auth_message}}
     <p><button (click)="entry(login, password)" >  Войти  </button></p>
 
-    <p class="goToReg" (click)="goToReg()" >Зарегистрироваться?
+    <!--<p class="goToReg" (click)="goToReg()" >Зарегистрироваться?-->
 </div>
 
 <div id="reg">
 
     <p> Регистрация </p>
     <p> Введите логин
-        <input id="newLogin" [(ngModel)] = "new_login" >
+        <input id="newLogin" required [(ngModel)] = "new_login" >
     <p> Введите пароль
-        <input id="newPassword1" type="password" [(ngModel)] = "new_password_1">
+        <input id="newPassword1" required type="password" [(ngModel)] = "new_password_1">
     <p> Повторите пароль
-        <input  (keyup)="checkPassword()" id="newPassword2" type="password"   [(ngModel)] = "new_password_2">
+        <input  (keyup)="checkPassword()" required id="newPassword2" type="password"   [(ngModel)] = "new_password_2">
     <p id="cM"> {{correct_message}}
     <p class="error_message" >{{reg_message}}
     <p><button (click)="registrate()" >  Зарегистрироваться  </button></p>

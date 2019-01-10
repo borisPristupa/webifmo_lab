@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from '../User';
 import {HttpService} from "../services/http.service";
 import {Router} from "@angular/router";
@@ -13,10 +13,10 @@ import {SessionStorageService} from 'ngx-webstorage';
     providers: [HttpService]
 })
 
-export class AppAuthorizationComponent{
+export class AppAuthorizationComponent implements OnInit{
     login = "";
     password = "";
-    message = "";
+    auth_message = "";
 
     new_login ="";
     new_password_1 = "";
@@ -26,6 +26,11 @@ export class AppAuthorizationComponent{
 
     user : User = new User();
     newUser : User = new User();
+
+    ngOnInit(){
+        this.storage.store("auth",false);
+        this.storage.store("message", "");
+    }
 
     constructor(private httpService: HttpService,
                 private router: Router,
@@ -49,19 +54,23 @@ export class AppAuthorizationComponent{
 
         this.httpService.postAuth(user)
             .subscribe(
-                data => {this.message = data['message'];
+                data => {this.auth_message = data['message'];
                                 this.storage.store("sessionId",data['sessionId']);
                                 this.storage.store("message",data['message']);
                                 this.storage.store("login",this.user.login);
                     this.storage.store("auth",true);
-                    console.log(this.message);
-                    if(this.message == null ) {
+                    console.log(this.auth_message);
+                    if(this.auth_message == null || this.auth_message == "Already authorized") {
                         this.router.navigate(['base']);
+                    }
+                    else if (!this.isServerError()) {
+                        this.router.navigate(['duck']);
                     }
                  },
                 error => {
                     //console.log("the code is " + error.statusCode);
                     this.storage.store("auth",false);
+                    this.storage.store("message","404");
                     this.router.navigate(['duck']);
                 }
             );
@@ -69,19 +78,19 @@ export class AppAuthorizationComponent{
 
     }
 
-
-    goToReg(){
-        console.log("переходим к регистрации");
-        const auth = document.getElementById("auth");
-        const reg = document.getElementById("reg");
-
-        reg.style.visibility = "visible";
-        auth.style.visibility = "hidden";
-
-    }
+    //
+    // goToReg(){
+    //     console.log("переходим к регистрации");
+    //     const auth = document.getElementById("auth");
+    //     const reg = document.getElementById("reg");
+    //
+    //     reg.style.visibility = "visible";
+    //     auth.style.visibility = "hidden";
+    //
+    // }
 
     registrate(){
-        if(this.new_password_1 == this.new_password_2){
+        if(this.isNewDataCorrect()){
             this.newUser.login = this.new_login;
             this.newUser.password = this.new_password_1;
            this.httpService.postReg(this.newUser).subscribe(
@@ -92,30 +101,47 @@ export class AppAuthorizationComponent{
                    this.storage.store("login",this.user.login);
                    this.storage.store("auth",true);
                    //console.log(this.message);
-                   if(this.reg_message == null ) {
+                   if (this.reg_message == null || this.reg_message == "Already authorized") {
                        this.router.navigate(['base']);
+                   }
+                   else if (!this.isServerError()) {
+                       this.router.navigate(['duck']);
                    }
                },
                error => {
                    //console.log("the code is " + error.statusCode);
                    this.storage.store("auth",false);
+                   this.storage.store("message","404");
                    this.router.navigate(['duck']);
                }
            )
         }
     }
 
+    isNewDataCorrect() {
+        return this.new_login != "" && this.new_password_1 != "" && this.new_password_1 == this.new_password_2;
+    }
+
 // проверка идентиности вводимых паролей
     checkPassword(){
         const text = document.getElementById("cM");
-        if (this.new_password_1 != this.new_password_2) {
+        if (this.new_password_1 != this.new_password_2  ) {
             this.correct_message = "Пароли не совпадают";
             text.style.color = "red";
         }
-        else {
+        else if (this.new_password_2 != "") {
             this.correct_message = "Пароли совпадают :) ";
             text.style.color = "green";
         }
+    }
+
+    isServerError(){
+        return this.storage.retrieve("message") != "Wrong password" &&
+            this.storage.retrieve("message") != "Not such user "+ this.user &&
+            this.storage.retrieve("message") != "Already authorized" &&
+            this.storage.retrieve("message") != "User "+this.new_login+" already registered" &&
+            this.storage.retrieve("message") != null ;
+
     }
 
 

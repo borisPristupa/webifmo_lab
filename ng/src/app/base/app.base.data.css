@@ -6,19 +6,34 @@
 
 }
 
-.user_data{
-    margin-left: 40%;
+/*.user_data{*/
+    /*!*margin-left: 40%;*!*/
+/*}*/
+
+
+.main_info{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-content: space-around;
+}
+.buttons{
+    font-family: cursive;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-content: space-around;
 }
 
 .coordinates{
-    position: absolute;
-    margin-left: 30%;
+    /*position: absolute;*/
+    /*margin-left: 30%;*/
     text-align: center;
 }
 
-.user_data,.coordinates{
-    display: inline-block;
-}
+/*.user_data,.coordinates{*/
+    /*display: inline-block;*/
+/*}*/
 
 #y{
     text-align: center;

@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {TemplateRef, ViewChild} from '@angular/core';
 import {Point} from "../Point";
 import {HttpService} from "../services/http.service";
 import {Router} from "@angular/router";
@@ -15,21 +14,32 @@ import {Records} from "../Records";
     providers: [HttpService]
 })
 export class AppBaseData implements OnInit{
-  //  @ViewChild('myTemplate') myTemplate: TemplateRef<any>;
     records: Array<Records> ;
 
     ngOnInit(){
-         console.log("Переход на вторую страницу осуществлен");
+        console.log("Переход на вторую страницу осуществлен");
         this.draw();
 
         this.httpService.getRecordsBySessionId(this.storage.retrieve("sessionId")).subscribe(
             data => {
-                this.storage.store("records", data['records']);
-                this.drawAllPoints();
-                this.records = data['records']
+                //this.respond_message = data['message'];
+                //this.storage.store("message",data['message']);
+
+                //if (this.respond_message == null){ // успешно
+                    this.storage.store("records", data['records']);
+                    this.drawAllPoints();
+                    this.records = data['records']
+                //}
+                //else if (this.respond_message != "Sorry, you have to log in") this.router.navigate(['duck']);
+
+            },
+            error => {
+                this.storage.store("message", "404");
+                this.router.navigate(['duck']);
             }
         );
     }
+
     point : Point = new Point();
 
     constructor(private httpService: HttpService,
@@ -48,11 +58,10 @@ export class AppBaseData implements OnInit{
     current_x: number;
     current_y: number;
 
-    request_message: string;
-    error_message: string;
+    respond_message: string;
+    error_message_y: string;
 
     i: number;
-
 
 
 
@@ -78,13 +87,24 @@ export class AppBaseData implements OnInit{
     submitByButton(point: Point){
         this.httpService.getAllRecordsByNew(this.storage.retrieve('sessionId'),point)
             .subscribe(
-                data=>{this.storage.store("records",data['records']);
-                            this.request_message = data['message'];
+                data=>{
 
-                            this.drawAllPoints();
-                            this.records = data['records']
+                            this.respond_message = data['message'];
+                            this.storage.store("message", data['message']);
+
+                            if (this.respond_message == null ){
+                                this.storage.store("records",data['records']);
+                                this.drawAllPoints();
+                                this.records = data['records']
+                            }
+
+                            else if (this.isServerError()) {
+                                this.router.navigate(['duck']);
+                            }
+
 
                     }, error => {
+                    this.storage.store("message", "404");
                     this.router.navigate(['duck']);
                 });
     }
@@ -93,25 +113,54 @@ export class AppBaseData implements OnInit{
     submitByGraphic(event: MouseEvent){
         this.httpService.getAllRecordsByNew(this.storage.retrieve('sessionId'),this.getCoordinates(event))
             .subscribe(
-                data=>{this.storage.store("records",data['records']);
-                            this.request_message = data['message'];
+                data=>
 
-                            this.drawAllPoints();
-                            this.records = data['records']
+
+                {this.respond_message = data['message'];
+                    this.storage.store("message", data['message']);
+
+                    if (this.respond_message == null ){
+                        this.storage.store("records",data['records']);
+                        this.drawAllPoints();
+                        this.records = data['records']
+                    }
+
+                    else if (this.isServerError()) {
+                        this.router.navigate(['duck']);
+                    }
+
+
                 }, error => {
+                    this.storage.store("message", "404");
                     this.router.navigate(['duck']);
                 }
             )
     }
 
+    isServerError(){
+        return this.respond_message != "Invalid parameters. Invalid x." &&
+            this.respond_message != "Invalid parameters. Invalid y." &&
+            this.respond_message != "Invalid parameters. Invalid r." &&
+
+            this.respond_message != "Invalid parameters. Invalid x. Invalid y." &&
+            this.respond_message != "Invalid parameters. Invalid y. Invalid r." &&
+            this.respond_message != "Invalid parameters. Invalid x. Invalid r." &&
+
+            this.respond_message != "Invalid parameters. Invalid x. Invalid y. Invalid r." &&
+
+            this.respond_message != "Sorry, you have to log in" &&
+            this.respond_message != null ;
+    }
+
+
 // при некорректных значениях сообщение об ошибке
     validateY(y:number){
-        if  (y>=-3 && y <= 5 && y!=null)  {
-            this.error_message = "";
+        if  (y>=-3 && y <= 5 && y!=null && !this.isYEmpty())  {
+            this.error_message_y = "";
             return true;
         }
         else {
-            this.error_message = "Некорректное значение y";
+            this.error_message_y = "Некорректное значение y";
             return false;
         }
    }
@@ -126,11 +175,16 @@ export class AppBaseData implements OnInit{
         }
     }
 
+    isYEmpty(){
+        const val_y = (<HTMLInputElement> document.getElementById("y")).value;
+        return val_y == "";
+    }
+
 // чтение координат с графика
     getCoordinates(event: MouseEvent){
         //const graph = document.getElementById('sys').getBoundingClientRect();
-       this.current_x = (event.offsetX - 150) * this.r / 100;
-       this.current_y = (-1) * (event.offsetY - 150) * this.r / 100;
+       this.current_x = (event.offsetX - 150) * this.r /100;
+       this.current_y = (-1) * (event.offsetY - 150) * this.r /100;
        this.point.x = this.current_x;
        this.point.y = this.current_y;
        this.point.r = this.r;
@@ -318,10 +372,19 @@ export class AppBaseData implements OnInit{
 // очистка истории нажатий - запрос
     clearRecords(){
         this.httpService.getClearRecords(this.storage.retrieve("sessionId"))
-            .subscribe(data=> {this.storage.clear("records");
-                            this.draw();
-                            this.records = [];
+            .subscribe(data=> {
+                    this.storage.store("message",data['message']);
+                    this.respond_message = data['message'];
+
+                    if(this.respond_message == null){
+                        this.storage.clear("records");
+                        this.draw();
+                        this.records = [];
+                    }else if (this.respond_message != "Sorry, you have to log in.")  this.router.navigate(['duck']);
+
+
             },error => {
+                this.storage.store("message", "404");
                 this.router.navigate(['duck']);
             }
         );
@@ -331,15 +394,23 @@ export class AppBaseData implements OnInit{
     closeSession(){
         this.httpService.getExit(this.storage.retrieve("login"))
             .subscribe(data=> {
-                        this.storage.store('auth',"false");
-                        this.storage.clear("login");
-                        this.storage.clear("sessionId");
-                        this.storage.clear("message");
-                        this.storage.clear("records");
-                this.router.navigate(['']);
+
+                        //todo: убрать комментарии внизу, после изменения ответа запроса
+                     //   this.storage.store("message",data["message"]);
+                    //    this.respond_message = data['message'];
+
+               // if (this.respond_message == null ) { // успешно
+                    this.storage.store('auth',"false");
+                    this.storage.clear("login");
+                    this.storage.clear("sessionId");
+                    this.storage.clear("records");
+                    this.router.navigate(['']);
+               // }
+                //else this.router.navigate(['duck']);
             },
                     error => {
                     this.router.navigate(['duck']);
+                        this.storage.store("message","404");
             });
     }
 

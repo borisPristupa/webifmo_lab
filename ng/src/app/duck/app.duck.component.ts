@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {SessionStorageService} from 'ngx-webstorage';
 import {Router} from "@angular/router";
-import {el} from "@angular/platform-browser/testing/src/browser_util";
+
 import Loader from "./game";
 
 @Component({
@@ -10,6 +10,16 @@ import Loader from "./game";
     styleUrls: ['./app.duck.css']
 })
 export class AppDuckComponent implements OnInit, OnDestroy{
+    cause : string;
+
+    ngOnInit(): void {
+        if (this.storage.retrieve("message") == null ||
+            this.storage.retrieve("message") == "") this.cause = "not found";
+        else this.cause = this.storage.retrieve("message");
+
+        Loader.prototype.load();
+    }
+
 
     constructor(private storage: SessionStorageService,
                 private router: Router){}
@@ -22,13 +32,8 @@ export class AppDuckComponent implements OnInit, OnDestroy{
 
     }
 
-    ngOnInit(): void {
-        Loader.prototype.load();
-    }
-
     ngOnDestroy(): void {
         Loader.prototype.stop_interval();
     }
-
 
 }
