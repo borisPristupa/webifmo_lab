@@ -1,4 +1,4 @@
-CREATE TABLE client(
+CREATE TABLE clientEntity(
   id serial PRIMARY KEY,
   login    text   not null UNIQUE,
   password text   not null
@@ -11,17 +11,17 @@ CREATE TABLE record(
     y numeric(6, 3) NOT NULL,
     r numeric(3,1) NOT NULL,
     hit boolean NOT NULL,
-    client_id int NOT NULL REFERENCES client
+    client_id int NOT NULL REFERENCES clientEntity
 );
 
 CREATE OR REPLACE FUNCTION hash_password() RETURNS TRIGGER AS $$
     BEGIN
-            UPDATE client set password = md5(NEW.password) WHERE id=NEW.id;
+            UPDATE clientEntity set password = md5(NEW.password) WHERE id=NEW.id;
             RETURN NEW;
     END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER hash_trigger
-AFTER INSERT ON client
+AFTER INSERT ON clientEntity
     FOR EACH ROW EXECUTE PROCEDURE hash_password();
 

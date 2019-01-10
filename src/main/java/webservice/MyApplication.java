@@ -2,7 +2,7 @@ package webservice;
 
 import ejb.DBBean;
 import ejb.HelloBean;
-import ejb.SessionBean;
+import ejb.SessionState;
 import webservice.filters.AllowCrossOriginFilter;
 
 import javax.ws.rs.ApplicationPath;
@@ -11,14 +11,14 @@ import java.util.*;
 
 @ApplicationPath("/app")
 public class MyApplication extends Application {
-    private static HashMap<String, SessionBean> sessionBeanHashMap = new HashMap<>();
+    private static HashMap<String, SessionState> sessionBeanHashMap = new HashMap<>();
     public static int SESSION_ID_LENGTH = 24;
 
-    public static Optional<SessionBean> getSessionBean(String id) {
+    public static Optional<SessionState> getSessionBean(String id) {
         return Optional.ofNullable(sessionBeanHashMap.get(id));
     }
 
-    public static String registerSessionBean(SessionBean sessionBean) {
+    public static String registerSessionBean(SessionState sessionState) {
         Random random = new Random();
         StringBuilder key;
         do {
@@ -30,7 +30,7 @@ public class MyApplication extends Application {
             }
         } while (sessionBeanHashMap.containsKey(key.toString()));
 
-        sessionBeanHashMap.put(key.toString(), sessionBean);
+        sessionBeanHashMap.put(key.toString(), sessionState);
 
         return key.toString();
     }
@@ -40,8 +40,8 @@ public class MyApplication extends Application {
     }
 
     public static String findSessionByClientId(Integer clientId) {
-        for (HashMap.Entry<String, SessionBean> entry : sessionBeanHashMap.entrySet()) {
-            if (entry.getValue().getClient().getId().equals(clientId)) {
+        for (HashMap.Entry<String, SessionState> entry : sessionBeanHashMap.entrySet()) {
+            if (entry.getValue().getClientEntity().getId().equals(clientId)) {
                 return entry.getKey();
             }
         }

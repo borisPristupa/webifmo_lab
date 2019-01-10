@@ -17,9 +17,9 @@ public class HelloBean implements Serializable {
 
     @GET
     public String greet(@QueryParam("sessionId") String sessionId) {
-        Optional<SessionBean> sessionBean = MyApplication.getSessionBean(sessionId);
+        Optional<SessionState> sessionBean = MyApplication.getSessionBean(sessionId);
         return sessionBean.map(session
-                -> "Hello " + session.getClient().getLogin())
+                -> "Hello " + session.getClientEntity().getLogin())
                 .orElse("Sorry, you need do authorization");
     }
 

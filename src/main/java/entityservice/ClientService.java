@@ -1,7 +1,6 @@
 package entityservice;
 
 import entity.ClientEntity;
-import stateful.ClientStateful;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
@@ -9,7 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import java.util.List;
-import java.util.Optional;
 
 @Stateful
 @LocalBean
@@ -18,72 +16,79 @@ public class ClientService {
     @PersistenceContext(unitName = "pu", type = PersistenceContextType.EXTENDED)
     private EntityManager em;
 
-    public ClientStateful auth(String login, String password) {
-        Optional<ClientEntity> client = findByLogin(login);
-        ClientStateful clientStateful = new ClientStateful();
-        clientStateful.setSessionId(null);
-
-        if (client.isPresent()) {
-            client = findByLoginAndPassword(login, password);
-
-            if (client.isPresent()) {
-                clientStateful.setClientEntity(client.get());
-                clientStateful.setMessage(null);
-                return clientStateful;
-            } else {
-                clientStateful.setClientEntity(null);
-                clientStateful.setMessage("Wrong password");
-                return clientStateful;
-            }
-        } else {
-            clientStateful.setClientEntity(null);
-            clientStateful.setMessage("No such user " + login);
-            return clientStateful;
+    public ClientEntity auth(String login, String password) throws DBException, ClientException {
+        findByLogin(login);
+        try {
+            return findByLoginAndPassword(login, password);
+        } catch (DBException | ClientException pe) {
+            throw pe;
+        } catch (Exception e) {
+            throw new ClientException("Wrong password");
         }
     }
 
-    public ClientStateful register(String login, String password) {
-        Optional<ClientEntity> client = findByLogin(login);
-        ClientStateful clientStateful = new ClientStateful();
-
-        if (client.isPresent()) {
-            clientStateful.setMessage("User " + login + " is already registered");
-        } else {
+    public ClientEntity register(String login, String password) throws DBException, ClientException {
+        try {
+            findByLogin(login);
+        } catch (DBException e) {
+            e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
             ClientEntity clientEntity = new ClientEntity();
             clientEntity.setLogin(login);
             clientEntity.setPassword(password);
-            em.persist(clientEntity);
-            em.flush();
+            try {
+                em.persist(clientEntity);
+                em.flush();
+            } catch (Exception pe) {
+                e.printStackTrace();
+                throw new DBException("DB exception");
+            }
+            return clientEntity;
 
-            clientStateful.setClientEntity(clientEntity);
         }
-        return clientStateful;
+
+        throw new ClientException("User " + login + " is already registered");
     }
 
     public List findAll() {
         return em.createQuery("SELECT c FROM ClientEntity c").getResultList();
     }
 
-    public Optional<ClientEntity> findByLogin(String login) {
-        List l = em.createQuery("SELECT c FROM ClientEntity c WHERE c.login = :login")
-                .setParameter("login", login)
-                .getResultList();
+    public ClientEntity findByLogin(String login) throws DBException, ClientException {
+        try {
+            List l = em.createQuery("SELECT c FROM ClientEntity c WHERE c.login = :login")
+                    .setParameter("login", login)
+                    .getResultList();
 
-        return l.isEmpty()
-                ? Optional.empty()
-                : Optional.ofNullable((ClientEntity) l.get(0));
+            if (l.isEmpty()) {
+                throw new ClientException("No such user " + login);
+            }
+            return (ClientEntity) l.get(0);
+        }catch (ClientException ce) {
+            throw ce;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DBException("DB exception");
+        }
     }
 
-    public Optional<ClientEntity> findByLoginAndPassword(String login, String password) {
-        List l = em.createQuery("SELECT c FROM ClientEntity c " +
-                "WHERE c.login=:login AND FUNCTION('md5', :password) = c.password")
-                .setParameter("login", login)
-                .setParameter("password", password)
-                .getResultList();
+    public ClientEntity findByLoginAndPassword(String login, String password) throws DBException, ClientException {
+        try {
+            List l = em.createQuery("SELECT c FROM ClientEntity c " +
+                    "WHERE c.login=:login AND FUNCTION('md5', :password) = c.password")
+                    .setParameter("login", login)
+                    .setParameter("password", password)
+                    .getResultList();
 
-        return l.isEmpty()
-                ? Optional.empty()
-                : Optional.ofNullable((ClientEntity) l.get(0));
+            if (l.isEmpty()) throw new ClientException("Wrong login/password");
+            return (ClientEntity) l.get(0);
+        } catch (ClientException ce) {
+            throw ce;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new DBException("DB exception");
+        }
     }
 
 

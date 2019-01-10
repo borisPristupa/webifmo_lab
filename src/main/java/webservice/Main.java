@@ -1,7 +1,7 @@
 package webservice;
 
 import ejb.MainBean;
-import ejb.SessionBean;
+import ejb.SessionState;
 import entity.RecordEntity;
 import entityservice.RecordService;
 import stateful.RecordsStateful;
@@ -25,13 +25,13 @@ public class Main {
     @GET
     @Path("records")
     public Response getRecords(@QueryParam("sessionId") String sessionId) {
-        Optional<SessionBean> sessionBean = MyApplication.getSessionBean(sessionId);
+        Optional<SessionState> sessionBean = MyApplication.getSessionBean(sessionId);
         RecordsStateful recordsStateful = new RecordsStateful();
 
         if (sessionBean.isPresent()) {
             recordsStateful.setRecordEntities(
                     recordService.findAllByClientId(
-                            sessionBean.get().getClient().getId()
+                            sessionBean.get().getClientEntity().getId()
                     )
             );
         } else {
@@ -50,13 +50,13 @@ public class Main {
                               @QueryParam("x") Double x,
                               @QueryParam("y") Double y,
                               @QueryParam("r") Double r) {
-        Optional<SessionBean> sessionBean = MyApplication.getSessionBean(sessionId);
+        Optional<SessionState> sessionBean = MyApplication.getSessionBean(sessionId);
         RecordsStateful recordsStateful = new RecordsStateful();
 
         if (sessionBean.isPresent()) {
             recordsStateful.setRecordEntities(
                     recordService.findAllByClientId(
-                            sessionBean.get().getClient().getId()
+                            sessionBean.get().getClientEntity().getId()
                     )
             );
 
@@ -90,7 +90,7 @@ public class Main {
             recordEntity.setR(BigDecimal.valueOf(r));
             recordEntity.setHit(mainBean
                     .isInsideArea(bX, bY, bR));
-            recordEntity.setClientByClientId(sessionBean.get().getClient());
+            recordEntity.setClientByClientId(sessionBean.get().getClientEntity());
 
             recordService.writeRecord(recordEntity);
             recordsStateful.addRecordEntity(recordEntity);
@@ -108,11 +108,11 @@ public class Main {
     @GET
     @Path("records/clear")
     public Response clearRecords(@QueryParam("sessionId") String sessionId) {
-        Optional<SessionBean> sessionBean = MyApplication.getSessionBean(sessionId);
+        Optional<SessionState> sessionBean = MyApplication.getSessionBean(sessionId);
         RecordsStateful recordsStateful = new RecordsStateful();
 
         if (sessionBean.isPresent()) {
-            recordService.clearAllByClientId(sessionBean.get().getClient().getId());
+            recordService.clearAllByClientId(sessionBean.get().getClientEntity().getId());
         } else {
             recordsStateful.setMessage("Sorry, you have to log in. ");
         }

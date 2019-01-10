@@ -1,28 +1,24 @@
 package webservice;
 
-import ejb.SessionBean;
+import ejb.SessionState;
 import entity.ClientEntity;
 import entityservice.ClientService;
-import stateful.ClientStateful;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Optional;
 
 @Path("auth")
 public class Session {
-    @EJB
-    private SessionBean sessionBean;
+    private SessionState sessionState = new SessionState();
 
     @EJB
     ClientService clientService;
 
     private String logIn(ClientEntity client) {
-        String sessionId = MyApplication.registerSessionBean(sessionBean);
-        sessionBean.setClient(client);
-        sessionBean.setSessionId(sessionId);
+        String sessionId = MyApplication.registerSessionBean(sessionState);
+        sessionState.set(client, sessionId);
         return sessionId;
     }
 
@@ -31,14 +27,16 @@ public class Session {
     @Produces({MediaType.APPLICATION_JSON})
     public Response register(@QueryParam("login") String login,
                              @QueryParam("password") String password) {
-        ClientStateful client = clientService.register(login, password);
-        if (null != client.getClientEntity()) {
-            client.setSessionId(logIn(client.getClientEntity()));
+        ClientEntity client;
+        try {
+            client = clientService.register(login, password);
+            sessionState.set(client, logIn(client));
+        } catch (Exception e) {
+            sessionState.set(e.getMessage());
         }
-
         return Response
                 .status(Response.Status.OK)
-                .entity(client.toString())
+                .entity(sessionState.toString())
                 .build();
     }
 
@@ -46,27 +44,25 @@ public class Session {
     @Produces({MediaType.APPLICATION_JSON})
     public Response auth(@QueryParam("login") String login,
                          @QueryParam("password") String password) {
-        Optional<ClientEntity> clientOptional = clientService.findByLogin(login);
-        ClientStateful client = new ClientStateful();
-
-        if (clientOptional.isPresent()) {
-            String sessionId = MyApplication.findSessionByClientId(clientOptional.get().getId());
+        ClientEntity client;
+        try {
+            client = clientService.findByLogin(login);
+            String sessionId = MyApplication.findSessionByClientId(client.getId());
             if (null != sessionId) {
-                client.setSessionId(sessionId);
-                client.setClientEntity(clientOptional.get());
-                client.setMessage("Already authorized");
+                sessionState.setSessionId(sessionId);
+                sessionState.setClientEntity(client);
+                sessionState.setMessage("Already authorized");
             } else {
                 client = clientService.auth(login, password);
-                if (null != client.getClientEntity())
-                    client.setSessionId(logIn(client.getClientEntity()));
+                sessionState.set(client, logIn(client));
             }
-        } else {
-            client.setMessage("No such user " + login);
+        } catch (Exception e) {
+            sessionState.set(e.getMessage());
         }
 
         return Response
                 .status(Response.Status.OK)
-                .entity(client.toString())
+                .entity(sessionState.toString())
                 .build();
     }
 
@@ -75,32 +71,36 @@ public class Session {
     @Produces({MediaType.APPLICATION_JSON})
     public Response exit(@QueryParam("login") String login) {
 
-        Optional<ClientEntity> clientEntity = clientService.findByLogin(login);
-
-        if (clientEntity.isPresent()) {
-            String sessionId = MyApplication.findSessionByClientId(clientEntity.get().getId());
+        ClientEntity clientEntity;
+        try {
+            clientEntity = clientService.findByLogin(login);
+            String sessionId = MyApplication.findSessionByClientId(clientEntity.getId());
             if (null != sessionId) {
                 MyApplication.removeSessionBean(sessionId);
             }
+            sessionState.set(clientEntity, sessionId);
+        } catch (Exception e) {
+            sessionState.set(e.getMessage());
         }
+
         return Response
                 .status(Response.Status.OK)
-                .entity(null)
-                .build(); //TODO replace this stub to something useful
+                .entity(sessionState.toString())
+                .build();
     }
 
     @POST
     @Path("reg")
     @Produces({MediaType.APPLICATION_JSON})
     public Response registerPOST(@FormParam("login") String login,
-                                 @FormParam("password") String password){
+                                 @FormParam("password") String password) {
         return register(login, password);
     }
 
     @POST
     @Produces({MediaType.APPLICATION_JSON})
     public Response authPOST(@FormParam("login") String login,
-                         @FormParam("password") String password) {
+                             @FormParam("password") String password) {
         return auth(login, password);
     }
 
