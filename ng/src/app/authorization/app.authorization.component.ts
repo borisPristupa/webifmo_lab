@@ -4,7 +4,6 @@ import {HttpService} from "../services/http.service";
 import {Router} from "@angular/router";
 
 import {SessionStorageService} from 'ngx-webstorage';
-import {el} from "@angular/platform-browser/testing/src/browser_util";
 
 
 @Component({
@@ -121,18 +120,23 @@ export class AppAuthorizationComponent implements OnInit{
 
     isNewDataCorrect() {
         this.checkEmptyData();
-        return this.new_login != "" && this.new_password_1 != "" && this.new_password_1 == this.new_password_2;
+        return this.new_login != "" && this.new_password_1 != "" && this.new_password_1 == this.new_password_2
+            && this.isNewLoginValid();
     }
 
     checkEmptyData() {
 
-        if (this.new_login == "") document.getElementById("newLogin").style.background = "red";
+        if (this.new_login == "" || !this.isNewLoginValid()) document.getElementById("newLogin").style.background = "red";
             else document.getElementById("newLogin").style.background = "white";
         if (this.new_password_1 == "") document.getElementById("newPassword1").style.background = "red";
             else document.getElementById("newPassword1").style.background = "white";
         if (this.new_password_2 == "") document.getElementById("newPassword2").style.background = "red";
             else document.getElementById("newPassword2").style.background = "white";
 
+    }
+
+    isNewLoginValid() {
+        return /^[a-zA-Z][a-zA-Z0-9]*$/.test(this.new_login);
     }
 
 // проверка идентичности вводимых паролей
