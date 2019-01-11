@@ -296,9 +296,11 @@ export default class Loader {
         window.clearInterval(this.loop);
     }
 
-
     draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        canvas.width = window.innerWidth * 0.8;
+        game.ground.w = canvas.width;
 
         game.objects.forEach(o => {
             o.update();
