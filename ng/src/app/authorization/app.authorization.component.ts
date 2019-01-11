@@ -91,7 +91,7 @@ export class AppAuthorizationComponent implements OnInit{
 
     registrate(){
         if(this.isNewDataCorrect()){
-            this.newUser.login = this.new_login;
+            this.user.login = this.newUser.login = this.new_login;
             this.newUser.password = this.new_password_1;
            this.httpService.postReg(this.newUser).subscribe(
                data => {
